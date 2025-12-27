@@ -6,7 +6,7 @@ body {
   text-align: center;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, #result {
   font-family: "Doto", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
@@ -18,11 +18,13 @@ h1, h2, h3, h4, h5, h6 {
   width: 70%;
   display: inline-block;
 }
-.actions {
+
+.input-actions {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 button {
   width: 100px;
   display: inline-flex;
@@ -31,17 +33,33 @@ button {
   font-weight: bold;
 }
 
+.instructions {
+  padding-left: 20px;
+}
+
+.language {
+  margin-bottom: 10px;
+}
+
 .add {
   background-color: #7bf37b;
   color: darkgreen;
   border: 1px solid darkgreen;
 }
+
 .subtract {
   background-color: #f36969;
   color: darkred;
   border: 1px solid darkred;
 }
 
+#result {
+  font-size: 40px;
+  text-align: center;
+}
+#actions {
+  margin-top: 10px;
+}
 
 svg {
   width: 20px;

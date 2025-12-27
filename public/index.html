@@ -17,13 +17,22 @@
 <h1>Simple Calculator</h1>
 
 <div id="root">
-  <ol>
+  <ol class="instructions">
     <li>First item</li>
     <li>Second item</li>
     <li>Third item</li>
   </ol>
 
-  <div class="actions">
+  <div class="language">
+    <label for="language-select">Language:</label>
+    <select id="language-select">
+      <option value="javascript">Javascript</option>
+      <option value="go">Go</option>
+      <option value="python">Python</option>
+    </select>
+  </div>
+
+  <div class="input-actions">
     <label for="num-input">Amount (1-67):</label>
     <input type="number" id="num-input" name="num-input" min="1" max="67" value="1"/>
 
@@ -45,6 +54,19 @@
       Subtract
     </button>
   </div>
+
+  <div id="operations"></div>
+
+  <div id="actions">
+    <button type="button" id="clear-button">
+      Clear
+    </button>
+    <button type="button" id="calculate-button">
+      Calculate
+    </button>
+  </div>
+
+  <div id="result"></div>
 
 </div>
 </body>
