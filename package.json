@@ -12,6 +12,8 @@
   },
   "private": "false",
   "dependencies": {
-    "http-server": "14.1.1"
+    "http-server": "14.1.1",
+    "serverless": "4.29.0",
+    "serverless-go-plugin": "2.4.1"
   }
 }

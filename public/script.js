@@ -9,7 +9,7 @@ const resultText = document.getElementById('result');
 
 let numberList = [];
 
-console.dir({input, addButton, subtractButton, operations});
+console.dir({input, addButton, subtractButton, operations, clearButton, calculateButton, resultText});
 
 input.addEventListener('input', function () {
   console.log('Input value changed:', input.value);
@@ -30,24 +30,28 @@ subtractButton.addEventListener('click', function () {
   appendOperation(-input.value);
 });
 
-calculateButton.addEventListener('click', function () {
+clearButton.addEventListener('click', function () {
+  console.log('Clear button clicked');
+
+  operations.innerHTML = '';
+  numberList = [];
+  resultText.innerText = '';
+
+  console.log(numberList);
+});
+
+calculateButton.addEventListener('click', async function () {
   console.log('Calculate button clicked');
-  const result = numberList.reduce((acc, curr) => acc + curr);
-  resultText.innerText = result;
+
   const language = languageSelect.value;
+  const result = await calculate(language)
+  resultText.innerText = result.toString();
+
   console.log({
     language,
     result,
     numberList
   });
-});
-
-clearButton.addEventListener('click', function () {
-  console.log('Clear button clicked');
-  operations.innerHTML = '';
-  numberList = [];
-  resultText.innerText = '';
-  console.log(numberList);
 });
 
 function appendOperation(amount) {
@@ -61,6 +65,25 @@ function appendOperation(amount) {
   }
   operations.appendChild(row);
   numberList.push(amount);
+
   console.log(numberList);
+}
+
+async function calculate(language) {
+  if (language === 'javascript') {
+    let result = 0;
+    for (let i = 0; i < numberList.length; i++) {
+      result += numberList[i];
+    }
+    return result;
+  }
+
+  const url = `https://todo.com/calculate/${language}`;
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(numberList)
+  });
+  const data = await response.json();
+  return data.result;
 }
 
