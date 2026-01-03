@@ -5,17 +5,31 @@ app: science-project
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: science-project-2025
 
+plugins:
+  - serverless-go-plugin
+
+custom:
+  go:
+    supportedRuntimes: ["provided.al2023"] # the plugin compiles a function only if runtime is declared here (either on function or provider level)
+    buildProvidedRuntimeAsBootstrap: true # if enabled, builds and archive function with only single "bootstrap" binary (useful for runtimes like provided.al2)
+
 provider:
   name: aws
-  runtime: python3.12
-  # Uncomment to easily set up a custom domain. Read the docs for more details:
-  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
-  # domain: api.example.com
+  httpApi:
+    cors:  true
 
 functions:
-  hello:
+  calc-python:
+    runtime: python3.12
     handler: handler.hello
     events:
       - httpApi:
-          path: /
-          method: get
+          path: /calc/python
+          method: post
+  calc-go:
+    runtime: provided.al2023
+    handler: handler.go
+    events:
+      - httpApi:
+          path: /calc/go
+          method: post

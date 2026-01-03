@@ -1,4 +1,4 @@
-const languageSelect=document.getElementById('language-select');
+const languageSelect = document.getElementById('language-select');
 const input = document.getElementById('num-input');
 const addButton = document.getElementById('add-button');
 const subtractButton = document.getElementById('subtract-button');
@@ -44,7 +44,7 @@ calculateButton.addEventListener('click', async function () {
   console.log('Calculate button clicked');
 
   const language = languageSelect.value;
-  const result = await calculate(language)
+  const result = await calculate(language);
   resultText.innerText = result.toString();
 
   console.log({
@@ -55,15 +55,15 @@ calculateButton.addEventListener('click', async function () {
 });
 
 function appendOperation(amount) {
-  const row = document.createElement('span');
+  const operation = document.createElement('span');
   if (amount >= 0) {
-    row.innerText = ` +${amount}`;
-    row.style.color = 'green';
+    operation.innerText = ` +${amount}`;
+    operation.style.color = 'green';
   } else {
-    row.innerText = ` ${amount}`;
-    row.style.color = 'red';
+    operation.innerText = ` ${amount}`;
+    operation.style.color = 'red';
   }
-  operations.appendChild(row);
+  operations.appendChild(operation);
   numberList.push(amount);
 
   console.log(numberList);
@@ -78,7 +78,7 @@ async function calculate(language) {
     return result;
   }
 
-  const url = `https://todo.com/calculate/${language}`;
+  const url = `https://8q1kodsag9.execute-api.us-east-1.amazonaws.com/calc/${language}`;
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(numberList)

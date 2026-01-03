@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve":  "http-server -o"
+    "serve":  "http-server -o",
+    "auth": "cd science-project-2025 && serverless login aws",
+    "deploy": "cd science-project-2025 && serverless deploy"
   },
   "repository": {
     "type": "git",
