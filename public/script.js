@@ -79,11 +79,28 @@ async function calculate(language) {
   }
 
   const url = `https://8q1kodsag9.execute-api.us-east-1.amazonaws.com/calc/${language}`;
-  const response = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(numberList)
-  });
-  const data = await response.json();
-  return data.result;
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(numberList)
+    });
+
+    if (!response.ok) {
+      console.error('Server returned an error:', response.status, response.statusText);
+      const errorText = await response.text();
+      console.error('Error body:', errorText);
+      return 'Error: ' + response.status;
+    }
+
+    const data = await response.json();
+    console.log('Response from server:', data);
+    return data.result !== undefined ? data.result : 'Error: No result';
+  } catch (error) {
+    console.error('Fetch error:', error);
+    return 'Error: ' + error.message;
+  }
 }
 

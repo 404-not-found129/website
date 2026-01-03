@@ -21,7 +21,7 @@ provider:
 functions:
   calc-python:
     runtime: python3.12
-    handler: handler.hello
+    handler: handler.calc
     events:
       - httpApi:
           path: /calc/python
