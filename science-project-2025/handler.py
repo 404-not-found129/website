@@ -1,6 +1,5 @@
 import json
 
-
 def calc(event, context):
   # The request body is in the 'body' field of the event object.
   body = event.get('body', '')
