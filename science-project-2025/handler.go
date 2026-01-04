@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 
@@ -9,26 +8,17 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
+// ResponseBody is the response body for the Lambda function
 type ResponseBody struct {
 	Result int `json:"result"`
 }
 
 func Handler(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPResponse, error) {
-	// Unmarshal the JSON body into a Go struct
+	// Our list of operations
 	var operations []int
-	body := request.Body
-	if request.IsBase64Encoded {
-		decodedBody, err := base64.StdEncoding.DecodeString(body)
-		if err != nil {
-			return events.APIGatewayV2HTTPResponse{
-				StatusCode: 400,
-				Body:       fmt.Sprintf("Error decoding base64 body: %v", err),
-			}, nil
-		}
-		body = string(decodedBody)
-	}
 
-	err := json.Unmarshal([]byte(body), &operations)
+	// Unmarshal the JSON body into our list of operations
+	err := json.Unmarshal([]byte(request.Body), &operations)
 	if err != nil {
 		return events.APIGatewayV2HTTPResponse{
 			StatusCode: 400,
@@ -36,12 +26,13 @@ func Handler(request events.APIGatewayV2HTTPRequest) (events.APIGatewayV2HTTPRes
 		}, nil
 	}
 
+	// Calculate the result
 	result := 0
 	for _, op := range operations {
 		result += op
 	}
 
-	// Marshal the body struct into a JSON string
+	// Marshal the ResponseBody into a JSON string for the response
 	jsonBody, err := json.Marshal(ResponseBody{Result: result})
 	if err != nil {
 		return events.APIGatewayV2HTTPResponse{StatusCode: 500}, err

@@ -1,21 +1,14 @@
 import json
 
 
-def calculate(operations):
-  result = 0
-  for op in operations:
-    result += op
-  return result
-
-
 def calc(event, context):
   # The request body is in the 'body' field of the event object.
-  # It is typically a JSON-encoded string and needs to be parsed.
   body = event.get('body', '')
   if body is not None and event.get('isBase64Encoded', False):
     import base64
     body = base64.b64decode(body).decode('utf-8')
 
+  # Unmarshal the JSON body into our list of operations
   if body:
     try:
       operations = json.loads(body)
@@ -40,11 +33,10 @@ def calc(event, context):
       'body': json.dumps({"message": "Request body must be a JSON array"})
     }
 
+  # Calculate the result
   result = 0
-
-  # TODO: calculate the result
-  result = calculate(operations)
-
+  for op in operations:
+    result += op
 
   return {
     "statusCode": 200,
