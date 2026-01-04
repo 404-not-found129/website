@@ -1,6 +1,6 @@
 # Science Project 2025
 
-# Project setup
+## Project setup
 1. Clone this repository using `git` or the github desktop app.
 2. Run `npm install` to install javascript dependencies.
 3. Run `npm run auth` to authenticate against an already created AWS account.
@@ -8,11 +8,11 @@
 5. Update the URL in the `calculate()` function in `public/script.js` file to point to the deployed API endpoint.
 6. Copy the contents of the `public` folder to an S3 bucket that has static website hosting enabled.
 
-# Running the project locally
+## Running the project locally
 1. Run `npm run serve` to start the local development server.
 2. Navigate to `localhost:8080` in your browser.
 
-# File descriptions
+## File descriptions
 * `package.json`: Lists the JavaScript dependencies for the project.
 * `public/index.html`: Contains the HTML structure for the project's web interface.
 * `public/script.js`: Contains the JavaScript code for the client-side functionality of the project, including the `calculate()` function that:
@@ -24,12 +24,12 @@
 * `science-project-2025/handler.go`: Contains the Go code for the AWS lambda functions that perform the calculations for the `go` language.
 * `science-project-2025/go.mod`: Contains the Go module dependencies for the `handler.go` file.
 
-# URLs
+## URLs
 * Website: http://jlc-science-project.s3-website-us-east-1.amazonaws.com/
 * Python function: https://8q1kodsag9.execute-api.us-east-1.amazonaws.com/calc/python
 * Go function: https://8q1kodsag9.execute-api.us-east-1.amazonaws.com/calc/go
 
-# Reference Links
+## Reference Links
 * [HTML elements reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements)
 * [The \<head\> Section in HTML](https://useful.codes/the-head-section-in-html/)
 * [CSS Selector Reference](https://www.w3schools.com/cssref/css_selectors.php)
