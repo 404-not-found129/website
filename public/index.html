@@ -20,56 +20,44 @@
 
 <h1>Simple Calculator</h1>
 
-<div id="root">
+<div id="calculator">
+    <div id="display">
+      <div id="operations"></div>
+      <div id="result">0</div>
+    </div>
 
-  <!-- Language Selection -->
-  <div class="language">
-    <label for="language-select">Language:</label>
-    <select id="language-select">
-      <option value="javascript">Javascript</option>
-      <option value="go">Go</option>
-      <option value="python">Python</option>
-    </select>
+    <div class="language">
+      <label for="language-select">Backend:</label>
+      <select id="language-select">
+        <option value="javascript">Javascript</option>
+        <option value="go">Go</option>
+        <option value="python">Python</option>
+      </select>
+    </div>
+
+    <div id="buttons">
+      <button type="button" class="btn clear" id="clear-button">C</button>
+      <button type="button" class="btn operator" id="divide-button">&divide;</button>
+      <button type="button" class="btn operator" id="multiply-button">&times;</button>
+      <button type="button" class="btn operator" id="subtract-button">-</button>
+
+      <button type="button" class="btn number">7</button>
+      <button type="button" class="btn number">8</button>
+      <button type="button" class="btn number">9</button>
+      <button type="button" class="btn operator" id="add-button">+</button>
+
+      <button type="button" class="btn number">4</button>
+      <button type="button" class="btn number">5</button>
+      <button type="button" class="btn number">6</button>
+      <button type="button" class="btn equal" id="calculate-button">=</button>
+
+      <button type="button" class="btn number">1</button>
+      <button type="button" class="btn number">2</button>
+      <button type="button" class="btn number">3</button>
+      
+      <button type="button" class="btn number zero">0</button>
+      <button type="button" class="btn number" disabled>.</button>
+    </div>
   </div>
-
-  <div class="input-actions">
-    <label for="num-input">Amount (1-67):</label>
-    <input type="number" id="num-input" name="num-input" min="1" max="67" value="1"/>
-
-    <button type="button" class="add" id="add-button">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-        <!--!Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-        <path
-          d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z"/>
-      </svg>
-      Add
-    </button>
-
-    <button type="button" class="subtract" id="subtract-button">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-        <!--!Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-        <path
-          d="M96 320C96 302.3 110.3 288 128 288L512 288C529.7 288 544 302.3 544 320C544 337.7 529.7 352 512 352L128 352C110.3 352 96 337.7 96 320z"/>
-      </svg>
-      Subtract
-    </button>
-  </div>
-
-  <!-- Container to display our list of addition and subtraction operations -->
-  <div id="operations"></div>
-
-  <div id="actions">
-    <button type="button" id="clear-button">
-      Clear
-    </button>
-    <button type="button" id="calculate-button">
-      Calculate
-    </button>
-  </div>
-
-  <!-- Container to display our result after being calculated -->
-  <div id="result"></div>
-
-</div>
 </body>
 </html>

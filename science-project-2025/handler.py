@@ -33,9 +33,29 @@ def calc(event, context):
     }
 
   # Calculate the result
-  result = 0
-  for op in operations:
-    result += op
+  if not operations:
+    return {
+      "statusCode": 200,
+      "body": json.dumps({"result": 0}),
+      "headers": {"Content-Type": "application/json"}
+    }
+
+  result = operations[0]['value']
+  for i in range(1, len(operations), 2):
+    op = operations[i]['value']
+    next_val = operations[i+1]['value']
+    if op == '+':
+      result += next_val
+    elif op == '-':
+      result -= next_val
+    elif op == '*':
+      result *= next_val
+    elif op == '/':
+      if next_val != 0:
+        result /= next_val
+      else:
+        result = "Error: Div by 0"
+        break
 
   return {
     "statusCode": 200,

@@ -1,93 +1,115 @@
 // get a reference to the elements on the page
 const languageSelect = document.getElementById('language-select');
-const input = document.getElementById('num-input');
-const addButton = document.getElementById('add-button');
-const subtractButton = document.getElementById('subtract-button');
-const operations = document.getElementById('operations');
+const operationsDisplay = document.getElementById('operations');
+const resultDisplay = document.getElementById('result');
 const clearButton = document.getElementById('clear-button');
 const calculateButton = document.getElementById('calculate-button');
-const resultText = document.getElementById('result');
+const addButton = document.getElementById('add-button');
+const subtractButton = document.getElementById('subtract-button');
+const multiplyButton = document.getElementById('multiply-button');
+const divideButton = document.getElementById('divide-button');
+const numberButtons = document.querySelectorAll('.btn.number');
 
-// list of numbers to add and subtract
-let numberList = [];
+// state
+let currentInput = '0';
+let operations = []; // List of {type: 'number'|'operator', value: number|string}
+let isEnteringResult = false;
 
-console.dir({input, addButton, subtractButton, operations, clearButton, calculateButton, resultText});
+// update the display
+function updateDisplay() {
+  resultDisplay.innerText = currentInput;
+  const displayOps = operations.map(op => {
+    if (op.type === 'operator') {
+      if (op.value === '*') return '×';
+      if (op.value === '/') return '÷';
+    }
+    return op.value;
+  });
+  operationsDisplay.innerText = displayOps.join(' ');
+}
 
-// ensure the input value is between 1 and 67
-input.addEventListener('input', function () {
-  console.log('Input value changed:', input.value);
-  if (input.value < 1) {
-    input.value = 1;
-  } else if (input.value > 67) {
-    input.value = 67;
-  }
-});
-
-// add the input value to the list of operations
-addButton.addEventListener('click', function () {
-  console.log('Add button clicked');
-  appendOperation(+input.value);
-});
-
-// subtract the input value from the list of operations
-subtractButton.addEventListener('click', function () {
-  console.log('Subtract button clicked');
-  appendOperation(-input.value);
-});
-
-// clear the list of operations and result
-clearButton.addEventListener('click', function () {
-  console.log('Clear button clicked');
-
-  operations.innerHTML = '';
-  numberList = [];
-  resultText.innerText = '';
-
-  console.log(numberList);
-});
-
-// calculate the result based on the list of operations
-calculateButton.addEventListener('click', async function () {
-  console.log('Calculate button clicked');
-
-  const language = languageSelect.value;
-  const result = await calculate(language);
-  resultText.innerText = result.toString();
-
-  console.log({
-    language,
-    result,
-    numberList
+// handle number clicks
+numberButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    if (isEnteringResult) {
+      currentInput = button.innerText;
+      isEnteringResult = false;
+    } else if (currentInput === '0') {
+      currentInput = button.innerText;
+    } else {
+      currentInput += button.innerText;
+    }
+    updateDisplay();
   });
 });
 
-// add or subtract the input value from the list of operations
-function appendOperation(amount) {
-  const operation = document.createElement('span');
-  if (amount >= 0) {
-    operation.innerText = ` +${amount}`;
-    operation.style.color = 'green';
-  } else {
-    operation.innerText = ` ${amount}`;
-    operation.style.color = 'red';
+function pushOperator(op) {
+  isEnteringResult = false;
+  const val = parseFloat(currentInput);
+  if (!isNaN(val)) {
+    // If we have a pending input, push it and the operator
+    operations.push({type: 'number', value: val});
+    operations.push({type: 'operator', value: op});
+    currentInput = '0';
+    updateDisplay();
+  } else if (operations.length > 0 && operations[operations.length - 1].type === 'operator') {
+    // If user clicked two operators in a row, replace the last one
+    operations[operations.length - 1].value = op;
+    updateDisplay();
   }
-  operations.appendChild(operation);
-  numberList.push(amount);
-
-  console.log(numberList);
 }
 
-async function calculate(language) {
-  // if the language is javascript, just sum the numbers and return the result
-  if (language === 'javascript') {
-    let result = 0;
-    for (let i = 0; i < numberList.length; i++) {
-      result += numberList[i];
-    }
-    return result;
+// handle operators
+addButton.addEventListener('click', () => pushOperator('+'));
+subtractButton.addEventListener('click', () => pushOperator('-'));
+multiplyButton.addEventListener('click', () => pushOperator('*'));
+divideButton.addEventListener('click', () => pushOperator('/'));
+
+// clear everything
+clearButton.addEventListener('click', () => {
+  currentInput = '0';
+  operations = [];
+  isEnteringResult = false;
+  resultDisplay.innerText = '0';
+  operationsDisplay.innerText = '';
+});
+
+// calculate
+calculateButton.addEventListener('click', async () => {
+  const val = parseFloat(currentInput);
+  if (!isNaN(val)) {
+    operations.push({type: 'number', value: val});
+    currentInput = '0';
   }
 
-  // if the language is not javascript, call the API to calculate the result
+  if (operations.length === 0) return;
+
+  const language = languageSelect.value;
+  resultDisplay.innerText = '...';
+  
+  const result = await calculate(language);
+  resultDisplay.innerText = result.toString();
+  
+  currentInput = result.toString();
+  isEnteringResult = true;
+  operations = [];
+});
+
+async function calculate(language) {
+  if (language === 'javascript') {
+    if (operations.length === 0) return 0;
+    let res = operations[0].value;
+    for (let i = 1; i < operations.length; i += 2) {
+      const op = operations[i].value;
+      const nextVal = operations[i+1].value;
+      if (op === '+') res += nextVal;
+      if (op === '-') res -= nextVal;
+      if (op === '*') res *= nextVal;
+      if (op === '/') res /= nextVal;
+    }
+    return res;
+  }
+
   const url = `https://8q1kodsag9.execute-api.us-east-1.amazonaws.com/calc/${language}`;
   try {
     const response = await fetch(url, {
@@ -95,22 +117,19 @@ async function calculate(language) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(numberList)
+      body: JSON.stringify(operations)
     });
 
     if (!response.ok) {
       console.error('Server returned an error:', response.status, response.statusText);
-      const errorText = await response.text();
-      console.error('Error body:', errorText);
-      return 'Error: ' + response.status;
+      return 'Error';
     }
 
     const data = await response.json();
-    console.log('Response from server:', data);
-    return data.result !== undefined ? data.result : 'Error: No result';
+    return data.result !== undefined ? data.result : 'Error';
   } catch (error) {
     console.error('Fetch error:', error);
-    return 'Error: ' + error.message;
+    return 'Error';
   }
 }
 
